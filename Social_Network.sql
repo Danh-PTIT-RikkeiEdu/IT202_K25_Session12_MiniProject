@@ -48,6 +48,37 @@ create table Likes (
     foreign key (post_id) references Posts(post_id) on delete cascade
 );
 
+-- 1. chèn dữ liệu mẫu cho bảng users (3 người dùng)
+insert into users (username, password, email) values 
+('cong_danh', 'danh_pass_123', 'danh@example.com'),
+('minh_tuan', 'tuan_secure_456', 'tuan@example.com'),
+('thu_ha', 'ha_secret_789', 'ha@example.com');
+
+-- 2. chèn dữ liệu mẫu cho bảng posts (3 bài viết)
+insert into posts (user_id, content) values 
+(1, 'chào mọi người, đây là bài viết đầu tiên của tôi trên mạng xã hội này!'),
+(1, 'hôm nay học sql thú vị thật, mọi người thấy sao?'),
+(2, 'có ai muốn đi cafe cuối tuần này không?');
+
+-- 3. chèn dữ liệu mẫu cho bảng likes (tương tác thích)
+insert into likes (user_id, post_id) values 
+(1, 3), 
+(2, 1), 
+(3, 1), 
+(3, 2);
+
+-- 4. chèn dữ liệu mẫu cho bảng comments (tương tác bình luận)
+insert into comments (user_id, post_id, content) values 
+(2, 1, 'chào danh nhé! rất vui được kết nối.'),
+(3, 1, 'bài viết hay quá bạn ơi!'),
+(1, 3, 'đi luôn tuấn ơi, cho mình một slot.');
+
+-- 5. chèn dữ liệu mẫu cho bảng friends (mối quan hệ bạn bè)
+insert into friends (user_id, friend_id, status) values 
+(1, 2, 'accepted'), 
+(1, 3, 'pending'),  
+(2, 3, 'accepted');
+
 
 
 
