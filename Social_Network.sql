@@ -118,3 +118,29 @@ DELIMITER ;
 
 CALL sp_add_user('Quyên', 'hquyen', 'ha@example.com'); -- test trùng email
 CALL sp_add_user('Quyên', 'hquyen', 'hquyen@gmail.com'); -- test chưa trùng email
+
+-- chức năng 5: YÊU CẦU PHI CHỨC NĂNG 
+DELIMITER //
+
+CREATE PROCEDURE sp_GetFriendListPaging(
+    IN p_user_id INT,
+    IN p_limit INT,
+    IN p_offset INT
+)
+BEGIN
+    -- Truy vấn danh sách bạn bè kèm thông tin chi tiết từ bảng Users
+    SELECT 
+        u.user_id,
+        u.username,
+        u.email
+    FROM Users u
+    JOIN Friends f ON (u.user_id = f.friend_id OR u.user_id = f.user_id)
+    WHERE (f.user_id = p_user_id OR f.friend_id = p_user_id) -- Tìm quan hệ của user này
+      AND u.user_id != p_user_id                            -- Loại trừ chính mình ra khỏi danh sách
+      AND f.status = 'accepted'                             -- Chỉ lấy những người đã đồng ý kết bạn
+    ORDER BY u.username ASC                                 -- Sắp xếp theo tên để phân trang ổn định
+    LIMIT p_limit OFFSET p_offset;                          -- Thực hiện phân trang
+END //
+
+DELIMITER ;
+CALL sp_GetFriendListPaging(1, 5, 0);
