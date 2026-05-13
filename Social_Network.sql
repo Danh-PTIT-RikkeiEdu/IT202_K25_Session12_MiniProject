@@ -102,3 +102,19 @@ GROUP BY p.post_id, p.content, u.username;
 
 SELECT * FROM vw_post_statistics;
 
+-- Chức năng 3: Xử lý Đăng ký tài khoản
+DELIMITER //
+CREATE PROCEDURE sp_add_user(p_username VARCHAR(100), p_password VARCHAR(20), p_email VARCHAR(100))
+BEGIN
+	IF EXISTS (SELECT * FROM users WHERE email = p_email)
+		THEN SELECT 'Email đã được sử dụng' error_mess;
+	ELSE
+		INSERT INTO users(username, password, email)
+        VALUES
+        (p_username, p_password, p_email);
+    END IF;
+END //
+DELIMITER ;
+
+CALL sp_add_user('Quyên', 'hquyen', 'ha@example.com'); -- test trùng email
+CALL sp_add_user('Quyên', 'hquyen', 'hquyen@gmail.com'); -- test chưa trùng email
