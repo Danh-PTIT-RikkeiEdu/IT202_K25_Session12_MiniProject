@@ -79,6 +79,11 @@ insert into friends (user_id, friend_id, status) values
 (1, 3, 'pending'),  
 (2, 3, 'accepted');
 
+-- chức năng 1 Hiển thị Hồ sơ người dùng an toàn
+create view view_user_info as
+select user_id, username, email, created_at
+from users;
 
+select * from view_user_info;
 
 
