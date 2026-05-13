@@ -86,4 +86,19 @@ from users;
 
 select * from view_user_info;
 
+-- chức năng 2: Báo cáo tương tác bài viết
+CREATE VIEW vw_post_statistics AS
+SELECT 
+    p.post_id,
+    p.content AS post_content,
+    u.username AS author_name,
+    COUNT(DISTINCT l.user_id) AS total_likes,
+    COUNT(DISTINCT c.comment_id) AS total_comments
+FROM Posts p
+JOIN Users u ON p.user_id = u.user_id
+LEFT JOIN Likes l ON p.post_id = l.post_id
+LEFT JOIN Comments c ON p.post_id = c.post_id
+GROUP BY p.post_id, p.content, u.username;
+
+SELECT * FROM vw_post_statistics;
 
