@@ -102,6 +102,35 @@ GROUP BY p.post_id, p.content, u.username;
 
 SELECT * FROM vw_post_statistics;
 
+CREATE VIEW vw_post_statistics AS -- Them dieu kien bai dang chưa xoa
+SELECT 
+    p.post_id,
+    p.content AS post_content,
+    u.username AS author_name,
+    COUNT(DISTINCT l.user_id) AS total_likes,
+    COUNT(DISTINCT c.comment_id) AS total_comments
+FROM Posts p
+JOIN Users u ON p.user_id = u.user_id
+LEFT JOIN Likes l ON p.post_id = l.post_id
+LEFT JOIN Comments c ON p.post_id = c.post_id
+WHERE p.is_deleted = FALSE -- Cho nay
+GROUP BY p.post_id, p.content, u.username;
+
+SELECT * FROM vw_post_statistics;
+
+delimiter //
+create procedure delete_post (p_post_id int)
+	
+begin
+	update Posts
+	set is_deleted = true
+	where post_id = p_post_id;
+end //
+
+delimiter ;
+
+call delete_post(2); -- vi du
+
 -- Chức năng 3: Xử lý Đăng ký tài khoản
 DELIMITER //
 CREATE PROCEDURE sp_add_user(p_username VARCHAR(100), p_password VARCHAR(20), p_email VARCHAR(100))
