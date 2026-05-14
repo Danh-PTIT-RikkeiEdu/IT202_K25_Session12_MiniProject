@@ -148,6 +148,35 @@ DELIMITER ;
 CALL sp_add_user('Quyên', 'hquyen', 'ha@example.com'); -- test trùng email
 CALL sp_add_user('Quyên', 'hquyen', 'hquyen@gmail.com'); -- test chưa trùng email
 
+-- Chức năng 4: Đăng bài viết & Điều hướng
+DELIMITER //
+
+CREATE PROCEDURE sp_create_post(
+    IN p_user_id INT,
+    IN p_content TEXT,
+    OUT p_new_post_id INT
+)
+BEGIN
+    -- Thêm bài viết mới
+    INSERT INTO Posts(user_id, content)
+    VALUES (p_user_id, p_content);
+
+    -- Lấy ID bài viết vừa tạo
+    SET p_new_post_id = LAST_INSERT_ID();
+END //
+
+DELIMITER ;
+
+-- Ví dụ gọi procedure
+CALL sp_create_post(
+    1,
+    'Đây là bài viết mới của tôi!',
+    @new_post_id
+);
+
+-- Hiển thị ID bài viết vừa tạo
+SELECT @new_post_id AS new_post_id;
+
 -- chức năng 5: YÊU CẦU PHI CHỨC NĂNG 
 DELIMITER //
 
